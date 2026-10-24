@@ -9,6 +9,7 @@
     <meta property="og:description" content="Nơi lưu giữ ba năm thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
     <meta property="og:image" content="https://ndc-confession.github.io/ndc-cfs/avatar-ndc-cfs.PNG" />
 
+    <!-- Google Fonts & Tailwind CSS CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -32,12 +33,23 @@
             color: #38bdf8 !important;
         }
 
+        /* Quay đĩa than êm ru */
         @keyframes spinSlow {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
         .spin-vinyl {
             animation: spinSlow 3.5s linear infinite !important;
+        }
+
+        /* Tinh chỉnh thanh tua nhạc cho mượt trên điện thoại */
+        input[type="range"]::-webkit-slider-thumb {
+            width: 14px;
+            height: 14px;
+            background-color: #38bdf8;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
         }
     </style>
 </head>
@@ -72,17 +84,19 @@
             </div>
         </div>
 
-        <!-- 2. Máy Phát Nhạc (4 bài hát) -->
+        <!-- 2. Máy Phát Nhạc (ĐÃ CÓ THANH TUA TIẾN TRÌNH NHẠC) -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
-            <div class="flex items-center justify-between gap-3 mb-4">
+            
+            <!-- Thông tin & Nút điều khiển -->
+            <div class="flex items-center justify-between gap-3 mb-3">
                 <div class="flex items-center gap-3 overflow-hidden">
                     <div id="diskIcon" class="w-12 h-12 rounded-full bg-gradient-to-tr from-sky-500 via-sky-400 to-indigo-600 flex items-center justify-center text-xl flex-shrink-0 shadow-lg shadow-sky-500/30">
                         💿
                     </div>
                     <div class="truncate">
                         <span class="text-[10px] uppercase tracking-widest font-bold text-sky-400">Đang phát</span>
-                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">Lần Cuối</h4>
-                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">Ngọt</p>
+                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">One Summer's Day</h4>
+                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">Joe Hisaishi</p>
                     </div>
                 </div>
 
@@ -93,8 +107,25 @@
                 </div>
             </div>
 
-            <div id="playlistContainer" class="space-y-1.5 pt-3 border-t border-slate-800 text-xs"></div>
-            <audio id="mainAudio" preload="none"></audio>
+            <!-- 🎚️ THANH TUA NHẠC & THỜI LƯỢNG MỚI THÊM -->
+            <div class="space-y-1 my-3 bg-slate-800/40 p-2.5 rounded-2xl border border-slate-800">
+                <input 
+                    id="progressBar" 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value="0" 
+                    class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer accent-sky-400 focus:outline-none"
+                >
+                <div class="flex justify-between text-[10px] text-slate-400 font-medium px-1">
+                    <span id="currentTime">00:00</span>
+                    <span id="durationTime">00:00</span>
+                </div>
+            </div>
+
+            <!-- Playlist 8 bài -->
+            <div id="playlistContainer" class="space-y-1.5 pt-2 border-t border-slate-800 text-xs"></div>
+            <audio id="mainAudio" preload="metadata"></audio>
         </div>
 
         <!-- 3. Checklist Thanh Xuân NDC -->
@@ -163,7 +194,10 @@
     </main>
 
     <script>
-const songs = [
+        // ==========================================
+        // 🎵 DANH SÁCH 8 BÀI HÁT
+        // ==========================================
+        const songs = [
             { title: "One Summer's Day", artist: "Joe Hisaishi", file: "onesummersday.mp3" },
             { title: "Phép Màu", artist: "Nguyễn Hùng", file: "phepmau.mp3" },
             { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
@@ -173,7 +207,7 @@ const songs = [
             { title: "End of Beginning", artist: "Djo", file: "endofbeginning.mp3" },
             { title: "Maidens of Sanctity", artist: "Genshin Impact", file: "maidensofsanctity.mp3" }
         ];
-        
+
         let currentIndex = 0;
         let isPlaying = false;
         const audio = document.getElementById('mainAudio');
@@ -182,6 +216,18 @@ const songs = [
         const songArtist = document.getElementById('currentSongArtist');
         const diskIcon = document.getElementById('diskIcon');
         const playlistContainer = document.getElementById('playlistContainer');
+
+        // Khai báo thanh tua nhạc
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds < 0) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
 
         function renderPlaylist() {
             playlistContainer.innerHTML = '';
@@ -206,6 +252,11 @@ const songs = [
             audio.src = songs[index].file;
             songTitle.textContent = songs[index].title;
             songArtist.textContent = songs[index].artist;
+
+            // Reset thanh tua nhạc về 0
+            progressBar.value = 0;
+            currentTimeEl.textContent = "00:00";
+            durationTimeEl.textContent = "00:00";
 
             document.querySelectorAll('.track-item').forEach((el, i) => {
                 el.classList.toggle('active-track', i === index);
@@ -250,11 +301,32 @@ const songs = [
         function prevSong() { selectSong((currentIndex - 1 + songs.length) % songs.length); }
         audio.addEventListener('ended', nextSong);
 
+        // ⏱️ CẬP NHẬT THANH TUA NHẠC KHI ĐANG HÁT
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percent;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+                durationTimeEl.textContent = formatTime(audio.duration);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        // 🖐️ NGƯỜI DÙNG TỰ KÉO TUA NHẠC ĐẾN ĐOẠN MÌNH THÍCH
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                audio.currentTime = (progressBar.value / 100) * audio.duration;
+            }
+        });
+
         renderPlaylist();
         loadSong(0);
 
         // ==========================================
-        // 💾 FIREBASE DATABASE (ĐÃ XÓA SẠCH DẤU TÍCH DÙNG CHUNG)
+        // 💾 FIREBASE DATABASE (DẤU TÍCH RIÊNG TỪNG MÁY)
         // ==========================================
         const FIREBASE_DB = "https://ndc-cfs-default-rtdb.firebaseio.com/todos";
         const todoList = document.getElementById('todoList');
@@ -278,7 +350,6 @@ const songs = [
                 todoCount.textContent = `${entries.length} mục`;
 
                 entries.forEach(([id, item]) => {
-                    // Tuyệt đối KHÔNG đọc trạng thái từ Firebase nữa!
                     createTodoElement(id, item.text, false);
                 });
 
@@ -292,7 +363,6 @@ const songs = [
             label.id = `todo-${id}`;
             label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
             
-            // CHỈ đọc trạng thái tick từ bộ nhớ riêng của thiết bị này
             const myCheckedMap = JSON.parse(localStorage.getItem('ndc_user_checked_list_v2') || '{}');
             const isDone = !!myCheckedMap[id];
 
@@ -305,7 +375,6 @@ const songs = [
             span.className = `text-slate-700 break-words flex-grow ${isDone ? 'line-through text-slate-400' : ''}`;
             span.textContent = text;
 
-            // Bấm chọn: CHỈ lưu vào điện thoại hiện tại
             checkbox.addEventListener('change', () => {
                 const checked = checkbox.checked;
                 span.classList.toggle('line-through', checked);
