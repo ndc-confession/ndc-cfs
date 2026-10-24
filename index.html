@@ -7,7 +7,8 @@
     
     <meta property="og:title" content="NDC CONFESSION ✨ Góc Thanh Xuân & Tâm Sự Ẩn Danh" />
     <meta property="og:description" content="Nơi lưu giữ 1000 ngày thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
-<meta property="og:image" content="https://ndc-confession.github.io/ndc-cfs/avatar-ndc-cfs.PNG" />
+    <!-- Bạn nhớ kiểm tra link ảnh này cho khớp với tên file trên GitHub nhé -->
+    <meta property="og:image" content="https://ndc-confession.github.io/ndc-cfs/avatar-ndc-cfs.PNG" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,7 +65,7 @@
             </div>
         </div>
 
-        <!-- 2. Máy Phát Nhạc (3 Bài - Mượt mà) -->
+        <!-- 2. Máy Phát Nhạc -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
             <div class="flex items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3 overflow-hidden">
@@ -89,23 +90,23 @@
             <audio id="mainAudio" preload="none"></audio>
         </div>
 
-        <!-- 3. Checklist Thanh Xuân NDC (ĐÃ KẾT NỐI DATABASE VĨNH VIỄN) -->
+        <!-- 3. Checklist Thanh Xuân NDC (MỚI NHẤT LÊN ĐẦU) -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
                         📌 Checklist Thanh Xuân tại NDC
                     </h3>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Lưu vĩnh viễn trên cơ sở dữ liệu</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Mục mới nhất sẽ hiển thị trên đầu</p>
                 </div>
                 <span id="todoCount" class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">0 mục</span>
             </div>
 
-            <!-- Danh sách lấy trực tiếp từ Firebase -->
-            <div id="todoList" class="divide-y divide-slate-100 my-2 text-xs sm:text-sm max-h-72 overflow-y-auto pr-1">
+            <!-- Danh sách cuộn lấy từ Firebase -->
+            <div id="todoList" class="divide-y divide-slate-100 my-2 text-xs sm:text-sm max-h-80 overflow-y-auto pr-1">
                 <div id="loadingTodos" class="py-6 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
                     <svg class="animate-spin h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <span>Đang đồng bộ dữ liệu toàn trường...</span>
+                    <span>Đang đồng bộ dữ liệu...</span>
                 </div>
             </div>
 
@@ -246,7 +247,7 @@
         loadSong(0);
 
         // ==========================================
-        // 💾 KẾT NỐI FIREBASE DATABASE VĨNH VIỄN
+        // 💾 FIREBASE DATABASE (MỚI NHẤT LÊN ĐẦU)
         // ==========================================
         const FIREBASE_DB = "https://ndc-cfs-default-rtdb.firebaseio.com/todos";
         const todoList = document.getElementById('todoList');
@@ -254,7 +255,7 @@
         const todoCount = document.getElementById('todoCount');
         const addTodoBtn = document.getElementById('addTodoBtn');
 
-        // Tải danh sách từ Firebase
+        // Tải danh sách và sắp xếp bài mới nhất lên đầu
         async function loadTodos() {
             try {
                 const res = await fetch(`${FIREBASE_DB}.json`);
@@ -262,7 +263,6 @@
                 
                 todoList.innerHTML = '';
 
-                // Nếu database hoàn toàn trống, tự tạo 3 mục mẫu ban đầu
                 if (!data) {
                     const defaults = [
                         "Chụp một bức ảnh chung với crush dưới sân trường",
@@ -280,11 +280,17 @@
                     return;
                 }
 
-                const entries = Object.entries(data);
+                // Sắp xếp theo thời gian: Mới nhất xếp trước
+                const entries = Object.entries(data).sort((a, b) => {
+                    const timeA = a[1].createdAt || 0;
+                    const timeB = b[1].createdAt || 0;
+                    return timeB - timeA;
+                });
+
                 todoCount.textContent = `${entries.length} mục`;
 
                 entries.forEach(([id, item]) => {
-                    createTodoElement(id, item.text, item.completed);
+                    createTodoElement(id, item.text, item.completed, false);
                 });
 
             } catch (err) {
@@ -292,8 +298,8 @@
             }
         }
 
-        // Tạo phần tử giao diện
-        function createTodoElement(id, text, completed) {
+        // Tạo phần tử (có hỗ trợ chèn lên đầu danh sách)
+        function createTodoElement(id, text, completed, isAtTop = false) {
             const label = document.createElement('label');
             label.id = `todo-${id}`;
             label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
@@ -310,7 +316,6 @@
             checkbox.addEventListener('change', async () => {
                 span.classList.toggle('line-through', checkbox.checked);
                 span.classList.toggle('text-slate-400', checkbox.checked);
-                // Cập nhật trạng thái tick lên Firebase
                 await fetch(`${FIREBASE_DB}/${id}.json`, {
                     method: 'PATCH',
                     headers: { 'Content-Type': 'application/json' },
@@ -320,10 +325,16 @@
 
             label.appendChild(checkbox);
             label.appendChild(span);
-            todoList.appendChild(label);
+
+            // Nếu là mục vừa mới thêm -> chèn ngay lên đầu trang!
+            if (isAtTop) {
+                todoList.prepend(label);
+            } else {
+                todoList.appendChild(label);
+            }
         }
 
-        // Thêm mục mới lên Firebase
+        // Thêm mục mới (Nhảy lên đầu tiên)
         async function addCustomTodo() {
             const text = todoInput.value.trim();
             if (!text) return;
@@ -338,32 +349,8 @@
                     body: JSON.stringify({
                         text: text,
                         completed: false,
-                        createdAt: Date.now()
+                        createdAt: Date.now() // Lưu thời gian tạo để sắp xếp
                     })
                 });
 
                 const result = await res.json();
-                createTodoElement(result.name, text, false);
-                todoInput.value = '';
-                
-                // Cập nhật số đếm
-                const currentCount = todoList.querySelectorAll('label').length;
-                todoCount.textContent = `${currentCount} mục`;
-
-            } catch (err) {
-                alert("Không thể lưu lên cơ sở dữ liệu. Vui lòng thử lại!");
-            } finally {
-                addTodoBtn.disabled = false;
-                addTodoBtn.textContent = '+';
-            }
-        }
-
-        todoInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addCustomTodo();
-        });
-
-        // Bắt đầu tải dữ liệu
-        loadTodos();
-    </script>
-</body>
-</html>
