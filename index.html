@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDC CONFESSION | Góc Kỷ Niệm & Thú Tội Ẩn Danh</title>
+    <title>NDC CONFESSION | Góc Kỷ Niệm & Tâm Sự Ẩn Danh</title>
     
     <meta property="og:title" content="NDC CONFESSION ✨ Góc Thanh Xuân & Thú Tội Ẩn Danh" />
     <meta property="og:description" content="Nơi lưu giữ 1000 ngày thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
@@ -25,6 +25,11 @@
         }
         .hand-font {
             font-family: 'Patrick Hand', cursive;
+        }
+        .active-track {
+            background-color: rgba(56, 189, 248, 0.15) !important;
+            border-color: rgba(56, 189, 248, 0.5) !important;
+            color: #38bdf8 !important;
         }
     </style>
 </head>
@@ -59,30 +64,75 @@
             </div>
         </div>
 
-        <!-- Máy phát nhạc -->
-        <div class="bg-slate-900 text-white rounded-2xl p-4 shadow-lg flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3 overflow-hidden">
-                <div class="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-lg flex-shrink-0">
-                    🎵
+        <!-- ========================================== -->
+        <!-- 🎵 MÁY PHÁT NHẠC PLAYLIST 3 BÀI CHUYÊN NGHIỆP -->
+        <!-- ========================================== -->
+        <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
+            <!-- Đang phát -->
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div id="diskIcon" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-xl flex-shrink-0 shadow-lg shadow-sky-500/20">
+                        💿
+                    </div>
+                    <div class="truncate">
+                        <span class="text-[10px] uppercase tracking-widest font-bold text-sky-400">Đang phát</span>
+                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">Lần Cuối</h4>
+                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">Ngọt</p>
+                    </div>
                 </div>
-                <div class="truncate">
-                    <p class="text-xs text-sky-400 font-semibold uppercase tracking-wider">Góc phát nhạc</p>
-                    <p class="text-sm font-bold truncate">Lần Cuối - Ngọt</p>
+
+                <!-- Nút điều khiển -->
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">
+                        ⏮
+                    </button>
+                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95">
+                        ▶
+                    </button>
+                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">
+                        ⏭
+                    </button>
                 </div>
             </div>
-            
-            <button id="musicToggleBtn" onclick="togglePlayMusic()" class="px-3.5 py-1.5 bg-sky-500 hover:bg-sky-400 text-white text-xs font-bold rounded-xl transition flex items-center gap-1.5 flex-shrink-0 shadow-md">
-                <span id="musicBtnIcon">▶ Bật nhạc</span>
-            </button>
-            
-            <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+
+            <!-- Danh sách 3 bài hát (Playlist) -->
+            <div class="space-y-1.5 pt-3 border-t border-slate-800 text-xs">
+                <!-- Track 1 -->
+                <div onclick="selectSong(0)" id="track-0" class="track-item active-track flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition">
+                    <div class="flex items-center gap-2.5 truncate">
+                        <span class="text-[11px] font-bold opacity-60">01</span>
+                        <span class="font-bold truncate">Lần Cuối</span>
+                    </div>
+                    <span class="text-[10px] opacity-70">Ngọt</span>
+                </div>
+
+                <!-- Track 2 -->
+                <div onclick="selectSong(1)" id="track-1" class="track-item flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition">
+                    <div class="flex items-center gap-2.5 truncate">
+                        <span class="text-[11px] font-bold opacity-60">02</span>
+                        <span class="font-bold truncate">Phép Màu</span>
+                    </div>
+                    <span class="text-[10px] opacity-70">Nguyễn Hùng</span>
+                </div>
+
+                <!-- Track 3 -->
+                <div onclick="selectSong(2)" id="track-2" class="track-item flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition">
+                    <div class="flex items-center gap-2.5 truncate">
+                        <span class="text-[11px] font-bold opacity-60">03</span>
+                        <span class="font-bold truncate">Chỉ Biết Nói Cho Em Nghe Vậy Thôi</span>
+                    </div>
+                    <span class="text-[10px] opacity-70">TopKN mashup</span>
+                </div>
+            </div>
+
+            <audio id="mainAudio" src="lancuoi.mp3"></audio>
         </div>
 
         <!-- Checklist NDC -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
-                    📌 Checklist thanh xuân tại NDC
+                    📌 Checklist Thanh Xuân tại NDC
                 </h3>
                 <span class="text-[11px] font-semibold text-slate-400">Những điều cần làm</span>
             </div>
@@ -94,11 +144,11 @@
                 </label>
                 <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
                     <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Ăn thử hết tất cả các món ở cổng trường NDC</span>
+                    <span class="text-slate-700">Thổ lộ tình cảm trên Nguyễn Đình Chiểu Confession</span>
                 </label>
                 <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
                     <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Dũng cảm thú tội trên NDC Confession một lần</span>
+                    <span class="text-slate-700">Đạt điểm cao môn bạn dở</span>
                 </label>
             </div>
 
@@ -142,28 +192,80 @@
 
         <footer class="text-center pt-2 text-[11px] font-semibold text-slate-400">
             <p>© 2026 NDC Confession • Nguyễn Đình Chiểu</p>
-            <p class="mt-0.5 text-[10px] text-slate-400">Made with 💙 for NDC students</p>
+            <p class="mt-0.5 text-[10px] text-slate-400">Made with 💕 for NDC students</p>
         </footer>
 
     </main>
 
+    <!-- JAVASCRIPT XỬ LÝ PLAYLIST 3 BÀI -->
     <script>
-        const audio = document.getElementById('bgMusic');
-        const musicBtnIcon = document.getElementById('musicBtnIcon');
+        const songs = [
+            { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
+            { title: "Phép Màu", artist: "B Ray", file: "phepmau.mp3" },
+            { title: "Chỉ Biết Nói Cho Em Nghe Vậy Thôi", artist: "Special Track", file: "chibietnoichoemnghevaythoi.mp3" }
+        ];
+
+        let currentIndex = 0;
         let isPlaying = false;
+
+        const audio = document.getElementById('mainAudio');
+        const playBtn = document.getElementById('masterPlayBtn');
+        const songTitle = document.getElementById('currentSongTitle');
+        const songArtist = document.getElementById('currentSongArtist');
+        const diskIcon = document.getElementById('diskIcon');
+
+        function loadSong(index) {
+            currentIndex = index;
+            audio.src = songs[index].file;
+            songTitle.textContent = songs[index].title;
+            songArtist.textContent = songs[index].artist;
+
+            // Đổi màu bài đang chọn trong danh sách
+            document.querySelectorAll('.track-item').forEach((el, i) => {
+                if (i === index) {
+                    el.classList.add('active-track');
+                } else {
+                    el.classList.remove('active-track');
+                }
+            });
+        }
 
         function togglePlayMusic() {
             if (isPlaying) {
                 audio.pause();
-                musicBtnIcon.textContent = "▶ Bật nhạc";
+                playBtn.textContent = "▶";
+                diskIcon.classList.remove('animate-spin');
                 isPlaying = false;
             } else {
                 audio.play();
-                musicBtnIcon.textContent = "⏸ Tạm dừng";
+                playBtn.textContent = "⏸";
+                diskIcon.classList.add('animate-spin');
                 isPlaying = true;
             }
         }
 
+        function selectSong(index) {
+            loadSong(index);
+            audio.play();
+            playBtn.textContent = "⏸";
+            diskIcon.classList.add('animate-spin');
+            isPlaying = true;
+        }
+
+        function nextSong() {
+            let nextIndex = (currentIndex + 1) % songs.length;
+            selectSong(nextIndex);
+        }
+
+        function prevSong() {
+            let prevIndex = (currentIndex - 1 + songs.length) % songs.length;
+            selectSong(prevIndex);
+        }
+
+        // Tự động chuyển bài khi hát xong
+        audio.addEventListener('ended', nextSong);
+
+        // Checklist To-do
         function addCustomTodo() {
             const input = document.getElementById('newTodoInput');
             const text = input.value.trim();
