@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NDC CONFESSION | Góc Kỷ Niệm & Tâm Sự Ẩn Danh</title>
     
-    <!-- Meta tag xem trước sang xịn khi gửi link qua Messenger, Facebook, Zalo -->
     <meta property="og:title" content="NDC CONFESSION ✨ Góc Thanh Xuân & Tâm Sự Ẩn Danh" />
     <meta property="og:description" content="Nơi lưu giữ 1000 ngày thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?q=80&w=1200&auto=format&fit=crop" />
 
-    <!-- Google Fonts & Tailwind CSS -->
+    <!-- Tối ưu tốc độ tải Font & CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -20,7 +19,6 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f6f8fb;
-            /* Giấy tập ô ly phong cách sổ tay học trò */
             background-image: 
                 linear-gradient(to right, rgba(186, 215, 233, 0.45) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(186, 215, 233, 0.45) 1px, transparent 1px);
@@ -67,7 +65,7 @@
             </div>
         </div>
 
-        <!-- 2. Máy Phát Nhạc Playlist 3 Bài (Êm ru, không pop-up lỗi) -->
+        <!-- 2. Máy Phát Nhạc (Đã tối ưu không tải ngầm tốn mạng) -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
             <div class="flex items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3 overflow-hidden">
@@ -76,12 +74,11 @@
                     </div>
                     <div class="truncate">
                         <span class="text-[10px] uppercase tracking-widest font-bold text-sky-400">Đang phát</span>
-                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">Đang tải...</h4>
-                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">...</p>
+                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">Lần Cuối</h4>
+                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">Ngọt</p>
                     </div>
                 </div>
 
-                <!-- Điều khiển chuyển bài -->
                 <div class="flex items-center gap-1.5 flex-shrink-0">
                     <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài trước">
                         ⏮
@@ -95,10 +92,11 @@
                 </div>
             </div>
 
-            <!-- Danh sách 3 bài tự động -->
+            <!-- Playlist -->
             <div id="playlistContainer" class="space-y-1.5 pt-3 border-t border-slate-800 text-xs"></div>
 
-            <audio id="mainAudio" preload="auto"></audio>
+            <!-- QUAN TRỌNG: preload="none" để web không bị load chậm -->
+            <audio id="mainAudio" preload="none"></audio>
         </div>
 
         <!-- 3. Checklist Thanh Xuân NDC -->
@@ -125,14 +123,13 @@
                 </label>
             </div>
 
-            <!-- Ô thêm mục tiêu mới (Hỗ trợ bấm phím Enter) -->
             <div class="flex gap-2 pt-2">
                 <input id="newTodoInput" type="text" placeholder="Thêm điều bạn muốn làm trước khi ra trường..." class="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
                 <button onclick="addCustomTodo()" class="px-3 py-2 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition">+</button>
             </div>
         </div>
 
-        <!-- 4. Khung Confession Ẩn Danh -->
+        <!-- 4. Khung Confession (Đã thêm loading="lazy" tải siêu tốc) -->
         <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-md">
             <div class="text-center mb-4">
                 <span class="text-2xl">🤫</span>
@@ -151,6 +148,7 @@
             <div class="w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 min-h-[580px]">
                 <iframe 
                     id="googleFormIframe"
+                    loading="lazy"
                     src="https://docs.google.com/forms/d/e/1FAIpQLSeCnsOTjJLq1BqLkUqGrIHpJ13vBEJt5HiLxwrGL2qHamQdQw/viewform?embedded=true" 
                     width="100%" 
                     height="620" 
@@ -171,7 +169,6 @@
 
     </main>
 
-    <!-- Xử lý logic an toàn, không pop-up lỗi -->
     <script>
         const songs = [
             { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
@@ -224,6 +221,10 @@
         }
 
         function togglePlayMusic() {
+            if (!audio.src || audio.src === window.location.href) {
+                loadSong(currentIndex);
+            }
+
             if (isPlaying) {
                 audio.pause();
                 playBtn.textContent = "▶";
@@ -235,7 +236,6 @@
                     diskIcon.classList.add('animate-spin');
                     isPlaying = true;
                 }).catch(() => {
-                    // Tự động im lặng, không hiện bất kỳ bảng cảnh báo nào
                     playBtn.textContent = "▶";
                     diskIcon.classList.remove('animate-spin');
                     isPlaying = false;
@@ -250,7 +250,6 @@
                 diskIcon.classList.add('animate-spin');
                 isPlaying = true;
             }).catch(() => {
-                // Tự động im lặng
                 playBtn.textContent = "▶";
                 diskIcon.classList.remove('animate-spin');
                 isPlaying = false;
@@ -269,11 +268,9 @@
 
         audio.addEventListener('ended', nextSong);
 
-        // Khởi động
         renderPlaylist();
         loadSong(0);
 
-        // Thêm việc To-do
         const todoInput = document.getElementById('newTodoInput');
         todoInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -289,4 +286,12 @@
             const label = document.createElement('label');
             label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
             label.innerHTML = `
-                <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-
+                <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
+                <span class="text-slate-700">${text}</span>
+            `;
+            todoList.appendChild(label);
+            todoInput.value = "";
+        }
+    </script>
+</body>
+</html>
