@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NDC CONFESSION | Góc Kỷ Niệm & Tâm Sự Ẩn Danh</title>
     
+    <!-- Meta tag xem trước xịn sò khi share Messenger, Zalo, Facebook -->
     <meta property="og:title" content="NDC CONFESSION ✨ Góc Thanh Xuân & Tâm Sự Ẩn Danh" />
     <meta property="og:description" content="Nơi lưu giữ 1000 ngày thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
+    <!-- Link ảnh đại diện chuẩn đuôi .PNG viết hoa của iPhone -->
     <meta property="og:image" content="https://ndc-confession.github.io/ndc-cfs/avatar-ndc-cfs.PNG" />
 
+    <!-- Google Fonts & Tailwind CSS CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -18,6 +21,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f6f8fb;
+            /* Giấy tập ô ly học sinh */
             background-image: 
                 linear-gradient(to right, rgba(186, 215, 233, 0.45) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(186, 215, 233, 0.45) 1px, transparent 1px);
@@ -35,6 +39,7 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 pb-12">
 
+    <!-- Header Navigation -->
     <header class="w-full bg-white/95 backdrop-blur border-b border-sky-100 px-4 py-3 sticky top-0 z-30 flex items-center justify-between shadow-sm">
         <span class="text-xs font-bold text-sky-600 flex items-center gap-1">
             🏫 THPT NGUYỄN ĐÌNH CHIỂU
@@ -47,6 +52,7 @@
 
     <main class="w-full max-w-lg mx-auto px-4 py-6 space-y-6">
 
+        <!-- 1. Banner NDC -->
         <div class="relative bg-white rounded-3xl p-6 border-2 border-dashed border-sky-200 shadow-sm text-center overflow-hidden">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-sky-200/80 text-sky-800 text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-widest">
                 Kỷ niệm học đường
@@ -54,15 +60,16 @@
             <h2 class="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight mt-2">
                 NGUYỄN ĐÌNH CHIỂU
             </h2>
+            <!-- Dòng chữ đã được rút gọn chuẩn ý bạn -->
             <p class="text-xs sm:text-sm text-sky-600 font-bold mt-1 hand-font text-base sm:text-lg">
-                ✨ Nơi cất giữ những lời chưa dám ngỏ ✨
+                ✨ Nơi lời chưa dám ngỏ ✨
             </p>
             <div class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold rounded-xl">
                 💌 1000 ngày cấp 3 trôi nhanh lắm, gửi tâm tư ngay đi nhé!
             </div>
         </div>
 
-        <!-- Máy phát nhạc -->
+        <!-- 2. Máy Phát Nhạc (3 bài, êm ru không cảnh báo) -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
             <div class="flex items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3 overflow-hidden">
@@ -77,30 +84,31 @@
                 </div>
 
                 <div class="flex items-center gap-1.5 flex-shrink-0">
-                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">⏮</button>
-                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95">▶</button>
-                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">⏭</button>
+                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài trước">⏮</button>
+                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95" title="Phát/Dừng">▶</button>
+                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài tiếp">⏭</button>
                 </div>
             </div>
 
             <div id="playlistContainer" class="space-y-1.5 pt-3 border-t border-slate-800 text-xs"></div>
+            <!-- preload="none" để web mở lên cực nhanh trong 1 giây -->
             <audio id="mainAudio" preload="none"></audio>
         </div>
 
-<!-- 3. Checklist Thanh Xuân NDC -->
+        <!-- 3. Checklist Thanh Xuân NDC (Lưu Database Vĩnh Viễn, Mới Nhất Lên Đầu) -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
                         📌 Checklist Thanh Xuân tại NDC
                     </h3>
-                    <!-- Dòng phụ đề bạn muốn đổi nè -->
+                    <!-- Phụ đề đã cập nhật đúng yêu cầu -->
                     <p class="text-[11px] text-slate-400 mt-0.5">Những điều nên làm trước khi ra trường</p>
                 </div>
                 <span id="todoCount" class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">0 mục</span>
             </div>
 
-            <!-- Danh sách lấy từ Firebase -->
+            <!-- Khung danh sách cuộn mượt mà -->
             <div id="todoList" class="divide-y divide-slate-100 my-2 text-xs sm:text-sm max-h-80 overflow-y-auto pr-1">
                 <div id="loadingTodos" class="py-6 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
                     <svg class="animate-spin h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -108,14 +116,14 @@
                 </div>
             </div>
 
-            <!-- Ô thêm mục tiêu mới có chữ gợi ý của bạn -->
+            <!-- Ô thêm mục tiêu mới -->
             <div class="flex gap-2 pt-2">
                 <input id="newTodoInput" type="text" placeholder="Viết điều nên làm trước khi ra trường..." class="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
                 <button id="addTodoBtn" onclick="addCustomTodo()" class="px-4 py-2 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition active:scale-95">+</button>
             </div>
         </div>
-        
-        <!-- Khung Confession -->
+
+        <!-- 4. Khung Confession Ẩn Danh -->
         <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-md">
             <div class="text-center mb-4">
                 <span class="text-2xl">🤫</span>
@@ -155,7 +163,11 @@
 
     </main>
 
+    <!-- JavaScript Xử Lý Toàn Bộ Logic -->
     <script>
+        // ==========================================
+        // 🎵 QUẢN LÝ PLAYLIST NHẠC
+        // ==========================================
         const songs = [
             { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
             { title: "Phép Màu", artist: "Nguyễn Hùng", file: "phepmau.mp3" },
@@ -242,7 +254,7 @@
         loadSong(0);
 
         // ==========================================
-        // 💾 FIREBASE DATABASE (LẬT NGƯỢC 100%)
+        // 💾 FIREBASE DATABASE (MỚI NHẤT LÊN ĐẦU TIÊN)
         // ==========================================
         const FIREBASE_DB = "https://ndc-cfs-default-rtdb.firebaseio.com/todos";
         const todoList = document.getElementById('todoList');
@@ -262,7 +274,7 @@
                     return;
                 }
 
-                // ⚡️ LẬT NGƯỢC MẢNG: BÀI VỪA GỬI SẼ LÊN ĐẦU TIÊN
+                // ⚡️ ĐẢO NGƯỢC DANH SÁCH: Mục mới nhất luôn nằm trên cùng
                 const entries = Object.entries(data).reverse();
 
                 todoCount.textContent = `${entries.length} mục`;
@@ -303,7 +315,7 @@
             label.appendChild(checkbox);
             label.appendChild(span);
 
-            // Chèn lên đầu
+            // Nếu là mục vừa mới gõ -> lập tức bay lên đỉnh đầu tiên!
             if (isAtTop) {
                 todoList.prepend(label);
             } else {
@@ -331,7 +343,7 @@
 
                 const result = await res.json();
                 
-                // true = chèn ngay lên đỉnh đầu tiên
+                // true = chèn ngay lên đầu trang
                 createTodoElement(result.name, text, false, true);
                 todoInput.value = '';
                 
