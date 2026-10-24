@@ -9,7 +9,6 @@
     <meta property="og:description" content="Nơi lưu giữ 1000 ngày thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?q=80&w=1200&auto=format&fit=crop" />
 
-    <!-- Tối ưu tốc độ tải Font & CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -65,7 +64,7 @@
             </div>
         </div>
 
-        <!-- 2. Máy Phát Nhạc (Đã tối ưu không tải ngầm tốn mạng) -->
+        <!-- 2. Máy Phát Nhạc (3 Bài - Mượt mà) -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
             <div class="flex items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3 overflow-hidden">
@@ -80,56 +79,44 @@
                 </div>
 
                 <div class="flex items-center gap-1.5 flex-shrink-0">
-                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài trước">
-                        ⏮
-                    </button>
-                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95" title="Phát/Dừng">
-                        ▶
-                    </button>
-                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài tiếp">
-                        ⏭
-                    </button>
+                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">⏮</button>
+                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95">▶</button>
+                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">⏭</button>
                 </div>
             </div>
 
-            <!-- Playlist -->
             <div id="playlistContainer" class="space-y-1.5 pt-3 border-t border-slate-800 text-xs"></div>
-
-            <!-- QUAN TRỌNG: preload="none" để web không bị load chậm -->
             <audio id="mainAudio" preload="none"></audio>
         </div>
 
-        <!-- 3. Checklist Thanh Xuân NDC -->
+        <!-- 3. Checklist Thanh Xuân NDC (ĐÃ KẾT NỐI DATABASE VĨNH VIỄN) -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
-                    📌 Checklist Thanh Xuân tại NDC
-                </h3>
-                <span class="text-[11px] font-semibold text-slate-400">Những điều cần làm</span>
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
+                        📌 Checklist Thanh Xuân tại NDC
+                    </h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Lưu vĩnh viễn trên cơ sở dữ liệu</p>
+                </div>
+                <span id="todoCount" class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">0 mục</span>
             </div>
 
-            <div id="todoList" class="divide-y divide-slate-100 my-2 text-xs sm:text-sm">
-                <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
-                    <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Chụp một bức ảnh chung với crush dưới sân trường</span>
-                </label>
-                <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
-                    <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Thổ lộ tình cảm trên NDC Confession</span>
-                </label>
-                <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
-                    <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Đạt điểm cao môn bạn chưa giỏi</span>
-                </label>
+            <!-- Danh sách lấy trực tiếp từ Firebase -->
+            <div id="todoList" class="divide-y divide-slate-100 my-2 text-xs sm:text-sm max-h-72 overflow-y-auto pr-1">
+                <div id="loadingTodos" class="py-6 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+                    <svg class="animate-spin h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>Đang đồng bộ dữ liệu toàn trường...</span>
+                </div>
             </div>
 
+            <!-- Ô thêm mục tiêu mới -->
             <div class="flex gap-2 pt-2">
-                <input id="newTodoInput" type="text" placeholder="Thêm điều bạn muốn làm trước khi ra trường..." class="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
-                <button onclick="addCustomTodo()" class="px-3 py-2 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition">+</button>
+                <input id="newTodoInput" type="text" placeholder="Thêm điều cần làm trước khi ra trường..." class="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
+                <button id="addTodoBtn" onclick="addCustomTodo()" class="px-4 py-2 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition active:scale-95">+</button>
             </div>
         </div>
 
-        <!-- 4. Khung Confession (Đã thêm loading="lazy" tải siêu tốc) -->
+        <!-- 4. Khung Confession -->
         <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-md">
             <div class="text-center mb-4">
                 <span class="text-2xl">🤫</span>
@@ -170,6 +157,9 @@
     </main>
 
     <script>
+        // ==========================================
+        // 🎵 QUẢN LÝ NHẠC
+        // ==========================================
         const songs = [
             { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
             { title: "Phép Màu", artist: "Nguyễn Hùng", file: "phepmau.mp3" },
@@ -178,7 +168,6 @@
 
         let currentIndex = 0;
         let isPlaying = false;
-
         const audio = document.getElementById('mainAudio');
         const playBtn = document.getElementById('masterPlayBtn');
         const songTitle = document.getElementById('currentSongTitle');
@@ -193,7 +182,6 @@
                 trackDiv.id = `track-${index}`;
                 trackDiv.className = `track-item flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition ${index === currentIndex ? 'active-track' : ''}`;
                 trackDiv.onclick = () => selectSong(index);
-                
                 trackDiv.innerHTML = `
                     <div class="flex items-center gap-2.5 truncate">
                         <span class="text-[11px] font-bold opacity-60">0${index + 1}</span>
@@ -212,18 +200,12 @@
             songArtist.textContent = songs[index].artist;
 
             document.querySelectorAll('.track-item').forEach((el, i) => {
-                if (i === index) {
-                    el.classList.add('active-track');
-                } else {
-                    el.classList.remove('active-track');
-                }
+                el.classList.toggle('active-track', i === index);
             });
         }
 
         function togglePlayMusic() {
-            if (!audio.src || audio.src === window.location.href) {
-                loadSong(currentIndex);
-            }
+            if (!audio.src || audio.src === window.location.href) loadSong(currentIndex);
 
             if (isPlaying) {
                 audio.pause();
@@ -256,42 +238,132 @@
             });
         }
 
-        function nextSong() {
-            let nextIndex = (currentIndex + 1) % songs.length;
-            selectSong(nextIndex);
-        }
-
-        function prevSong() {
-            let prevIndex = (currentIndex - 1 + songs.length) % songs.length;
-            selectSong(prevIndex);
-        }
-
+        function nextSong() { selectSong((currentIndex + 1) % songs.length); }
+        function prevSong() { selectSong((currentIndex - 1 + songs.length) % songs.length); }
         audio.addEventListener('ended', nextSong);
 
         renderPlaylist();
         loadSong(0);
 
+        // ==========================================
+        // 💾 KẾT NỐI FIREBASE DATABASE VĨNH VIỄN
+        // ==========================================
+        const FIREBASE_DB = "https://ndc-cfs-default-rtdb.firebaseio.com/todos";
+        const todoList = document.getElementById('todoList');
         const todoInput = document.getElementById('newTodoInput');
-        todoInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addCustomTodo();
-            }
-        });
+        const todoCount = document.getElementById('todoCount');
+        const addTodoBtn = document.getElementById('addTodoBtn');
 
-        function addCustomTodo() {
+        // Tải danh sách từ Firebase
+        async function loadTodos() {
+            try {
+                const res = await fetch(`${FIREBASE_DB}.json`);
+                const data = await res.json();
+                
+                todoList.innerHTML = '';
+
+                // Nếu database hoàn toàn trống, tự tạo 3 mục mẫu ban đầu
+                if (!data) {
+                    const defaults = [
+                        "Chụp một bức ảnh chung với crush dưới sân trường",
+                        "Thổ lộ tình cảm trên NDC Confession",
+                        "Đạt điểm cao môn bạn chưa giỏi"
+                    ];
+                    for (const text of defaults) {
+                        await fetch(`${FIREBASE_DB}.json`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ text, completed: false, createdAt: Date.now() })
+                        });
+                    }
+                    loadTodos();
+                    return;
+                }
+
+                const entries = Object.entries(data);
+                todoCount.textContent = `${entries.length} mục`;
+
+                entries.forEach(([id, item]) => {
+                    createTodoElement(id, item.text, item.completed);
+                });
+
+            } catch (err) {
+                todoList.innerHTML = '<div class="py-4 text-center text-xs text-slate-400">Chưa tải được danh sách. Hãy kiểm tra kết nối mạng nhé!</div>';
+            }
+        }
+
+        // Tạo phần tử giao diện
+        function createTodoElement(id, text, completed) {
+            const label = document.createElement('label');
+            label.id = `todo-${id}`;
+            label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = "checkbox";
+            checkbox.checked = !!completed;
+            checkbox.className = "w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300";
+            
+            const span = document.createElement('span');
+            span.className = `text-slate-700 break-words flex-grow ${completed ? 'line-through text-slate-400' : ''}`;
+            span.textContent = text;
+
+            checkbox.addEventListener('change', async () => {
+                span.classList.toggle('line-through', checkbox.checked);
+                span.classList.toggle('text-slate-400', checkbox.checked);
+                // Cập nhật trạng thái tick lên Firebase
+                await fetch(`${FIREBASE_DB}/${id}.json`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ completed: checkbox.checked })
+                });
+            });
+
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            todoList.appendChild(label);
+        }
+
+        // Thêm mục mới lên Firebase
+        async function addCustomTodo() {
             const text = todoInput.value.trim();
             if (!text) return;
 
-            const todoList = document.getElementById('todoList');
-            const label = document.createElement('label');
-            label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
-            label.innerHTML = `
-                <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                <span class="text-slate-700">${text}</span>
-            `;
-            todoList.appendChild(label);
-            todoInput.value = "";
+            addTodoBtn.disabled = true;
+            addTodoBtn.textContent = '...';
+
+            try {
+                const res = await fetch(`${FIREBASE_DB}.json`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text: text,
+                        completed: false,
+                        createdAt: Date.now()
+                    })
+                });
+
+                const result = await res.json();
+                createTodoElement(result.name, text, false);
+                todoInput.value = '';
+                
+                // Cập nhật số đếm
+                const currentCount = todoList.querySelectorAll('label').length;
+                todoCount.textContent = `${currentCount} mục`;
+
+            } catch (err) {
+                alert("Không thể lưu lên cơ sở dữ liệu. Vui lòng thử lại!");
+            } finally {
+                addTodoBtn.disabled = false;
+                addTodoBtn.textContent = '+';
+            }
         }
+
+        todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addCustomTodo();
+        });
+
+        // Bắt đầu tải dữ liệu
+        loadTodos();
     </script>
 </body>
 </html>
