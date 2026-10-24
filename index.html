@@ -349,7 +349,9 @@
                     })
                 });
 
-const result = await res.json();
+                const result = await res.json();
+                
+                // true = chèn ngay lên đầu trang
                 createTodoElement(result.name, text, false, true);
                 todoInput.value = '';
                 
