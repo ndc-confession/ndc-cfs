@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <!-- 2. Máy Phát Nhạc (4 bài, đĩa tròn vo) -->
+        <!-- 2. Máy Phát Nhạc (4 bài hát) -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
             <div class="flex items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3 overflow-hidden">
@@ -97,7 +97,7 @@
             <audio id="mainAudio" preload="none"></audio>
         </div>
 
-        <!-- 3. Checklist Thanh Xuân NDC (DẤU TÍCH LƯU RIÊNG TỪNG NGƯỜI) -->
+        <!-- 3. Checklist Thanh Xuân NDC -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
@@ -163,9 +163,6 @@
     </main>
 
     <script>
-        // ==========================================
-        // 🎵 PLAYLIST 4 BÀI HÁT
-        // ==========================================
         const songs = [
             { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
             { title: "Phép Màu", artist: "Nguyễn Hùng", file: "phepmau.mp3" },
@@ -253,7 +250,7 @@
         loadSong(0);
 
         // ==========================================
-        // 💾 FIREBASE DATABASE (DẤU TÍCH LƯU RIÊNG TỪNG MÁY)
+        // 💾 FIREBASE DATABASE (ĐÃ XÓA SẠCH DẤU TÍCH DÙNG CHUNG)
         // ==========================================
         const FIREBASE_DB = "https://ndc-cfs-default-rtdb.firebaseio.com/todos";
         const todoList = document.getElementById('todoList');
@@ -277,6 +274,7 @@
                 todoCount.textContent = `${entries.length} mục`;
 
                 entries.forEach(([id, item]) => {
+                    // Tuyệt đối KHÔNG đọc trạng thái từ Firebase nữa!
                     createTodoElement(id, item.text, false);
                 });
 
@@ -290,8 +288,8 @@
             label.id = `todo-${id}`;
             label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
             
-            // Lấy danh sách việc ĐÃ LÀM từ bộ nhớ riêng của máy này
-            const myCheckedMap = JSON.parse(localStorage.getItem('ndc_my_checked_todos') || '{}');
+            // CHỈ đọc trạng thái tick từ bộ nhớ riêng của thiết bị này
+            const myCheckedMap = JSON.parse(localStorage.getItem('ndc_user_checked_list_v2') || '{}');
             const isDone = !!myCheckedMap[id];
 
             const checkbox = document.createElement('input');
@@ -303,19 +301,19 @@
             span.className = `text-slate-700 break-words flex-grow ${isDone ? 'line-through text-slate-400' : ''}`;
             span.textContent = text;
 
-            // Bấm tích -> CHỈ LƯU VÀO MÁY RIÊNG NÀY, KHÔNG LÀM ẢNH HƯỞNG NGƯỜI KHÁC!
+            // Bấm chọn: CHỈ lưu vào điện thoại hiện tại
             checkbox.addEventListener('change', () => {
                 const checked = checkbox.checked;
                 span.classList.toggle('line-through', checked);
                 span.classList.toggle('text-slate-400', checked);
 
-                const currentMap = JSON.parse(localStorage.getItem('ndc_my_checked_todos') || '{}');
+                const currentMap = JSON.parse(localStorage.getItem('ndc_user_checked_list_v2') || '{}');
                 if (checked) {
                     currentMap[id] = true;
                 } else {
                     delete currentMap[id];
                 }
-                localStorage.setItem('ndc_my_checked_todos', JSON.stringify(currentMap));
+                localStorage.setItem('ndc_user_checked_list_v2', JSON.stringify(currentMap));
             });
 
             label.appendChild(checkbox);
