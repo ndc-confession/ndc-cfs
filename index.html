@@ -87,18 +87,20 @@
             <audio id="mainAudio" preload="none"></audio>
         </div>
 
-        <!-- Checklist NDC (ĐẢO NGƯỢC CÂU MỚI NHẤT LÊN ĐẦU) -->
+<!-- 3. Checklist Thanh Xuân NDC -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
                     <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
                         📌 Checklist Thanh Xuân tại NDC
                     </h3>
+                    <!-- Dòng phụ đề bạn muốn đổi nè -->
                     <p class="text-[11px] text-slate-400 mt-0.5">Những điều nên làm trước khi ra trường</p>
                 </div>
                 <span id="todoCount" class="text-xs font-bold text-sky-600 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">0 mục</span>
             </div>
 
+            <!-- Danh sách lấy từ Firebase -->
             <div id="todoList" class="divide-y divide-slate-100 my-2 text-xs sm:text-sm max-h-80 overflow-y-auto pr-1">
                 <div id="loadingTodos" class="py-6 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
                     <svg class="animate-spin h-4 w-4 text-sky-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -106,12 +108,13 @@
                 </div>
             </div>
 
+            <!-- Ô thêm mục tiêu mới có chữ gợi ý của bạn -->
             <div class="flex gap-2 pt-2">
                 <input id="newTodoInput" type="text" placeholder="Viết điều nên làm trước khi ra trường..." class="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
                 <button id="addTodoBtn" onclick="addCustomTodo()" class="px-4 py-2 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition active:scale-95">+</button>
             </div>
         </div>
-
+        
         <!-- Khung Confession -->
         <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-md">
             <div class="text-center mb-4">
