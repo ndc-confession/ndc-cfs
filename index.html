@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NDC CONFESSION | Góc Kỷ Niệm & Tâm Sự Ẩn Danh</title>
     
-    <meta property="og:title" content="NDC CONFESSION ✨ Góc Thanh Xuân & Thú Tội Ẩn Danh" />
+    <!-- Meta tag xem trước sang xịn khi gửi link qua Messenger, Facebook, Zalo -->
+    <meta property="og:title" content="NDC CONFESSION ✨ Góc Thanh Xuân & Tâm Sự Ẩn Danh" />
     <meta property="og:description" content="Nơi lưu giữ 1000 ngày thanh xuân và chia sẻ tâm sự ẩn danh 100% của học sinh THPT Nguyễn Đình Chiểu." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?q=80&w=1200&auto=format&fit=crop" />
 
+    <!-- Google Fonts & Tailwind CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -18,6 +20,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #f6f8fb;
+            /* Giấy tập ô ly phong cách sổ tay học trò */
             background-image: 
                 linear-gradient(to right, rgba(186, 215, 233, 0.45) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(186, 215, 233, 0.45) 1px, transparent 1px);
@@ -27,8 +30,8 @@
             font-family: 'Patrick Hand', cursive;
         }
         .active-track {
-            background-color: rgba(56, 189, 248, 0.15) !important;
-            border-color: rgba(56, 189, 248, 0.5) !important;
+            background-color: rgba(56, 189, 248, 0.18) !important;
+            border-color: rgba(56, 189, 248, 0.6) !important;
             color: #38bdf8 !important;
         }
     </style>
@@ -48,7 +51,7 @@
 
     <main class="w-full max-w-lg mx-auto px-4 py-6 space-y-6">
 
-        <!-- Banner NDC -->
+        <!-- 1. Banner NDC -->
         <div class="relative bg-white rounded-3xl p-6 border-2 border-dashed border-sky-200 shadow-sm text-center overflow-hidden">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-sky-200/80 text-sky-800 text-[10px] font-bold px-3 py-0.5 rounded-full uppercase tracking-widest">
                 Kỷ niệm học đường
@@ -64,71 +67,41 @@
             </div>
         </div>
 
-        <!-- ========================================== -->
-        <!-- 🎵 MÁY PHÁT NHẠC PLAYLIST 3 BÀI CHUYÊN NGHIỆP -->
-        <!-- ========================================== -->
+        <!-- 2. Máy Phát Nhạc Playlist 3 Bài (Êm ru, không pop-up lỗi) -->
         <div class="bg-slate-900 text-white rounded-3xl p-5 shadow-xl border border-slate-800">
-            <!-- Đang phát -->
             <div class="flex items-center justify-between gap-3 mb-4">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <div id="diskIcon" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-xl flex-shrink-0 shadow-lg shadow-sky-500/20">
+                    <div id="diskIcon" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-xl flex-shrink-0 shadow-lg shadow-sky-500/20 transition-transform">
                         💿
                     </div>
                     <div class="truncate">
                         <span class="text-[10px] uppercase tracking-widest font-bold text-sky-400">Đang phát</span>
-                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">Lần Cuối</h4>
-                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">Ngọt</p>
+                        <h4 id="currentSongTitle" class="text-sm font-extrabold truncate text-white">Đang tải...</h4>
+                        <p id="currentSongArtist" class="text-xs text-slate-400 truncate">...</p>
                     </div>
                 </div>
 
-                <!-- Nút điều khiển -->
+                <!-- Điều khiển chuyển bài -->
                 <div class="flex items-center gap-1.5 flex-shrink-0">
-                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">
+                    <button onclick="prevSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài trước">
                         ⏮
                     </button>
-                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95">
+                    <button id="masterPlayBtn" onclick="togglePlayMusic()" class="w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md transition active:scale-95" title="Phát/Dừng">
                         ▶
                     </button>
-                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95">
+                    <button onclick="nextSong()" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-xs transition active:scale-95" title="Bài tiếp">
                         ⏭
                     </button>
                 </div>
             </div>
 
-            <!-- Danh sách 3 bài hát (Playlist) -->
-            <div class="space-y-1.5 pt-3 border-t border-slate-800 text-xs">
-                <!-- Track 1 -->
-                <div onclick="selectSong(0)" id="track-0" class="track-item active-track flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition">
-                    <div class="flex items-center gap-2.5 truncate">
-                        <span class="text-[11px] font-bold opacity-60">01</span>
-                        <span class="font-bold truncate">Lần Cuối</span>
-                    </div>
-                    <span class="text-[10px] opacity-70">Ngọt</span>
-                </div>
+            <!-- Danh sách 3 bài tự động -->
+            <div id="playlistContainer" class="space-y-1.5 pt-3 border-t border-slate-800 text-xs"></div>
 
-                <!-- Track 2 -->
-                <div onclick="selectSong(1)" id="track-1" class="track-item flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition">
-                    <div class="flex items-center gap-2.5 truncate">
-                        <span class="text-[11px] font-bold opacity-60">02</span>
-                        <span class="font-bold truncate">Phép Màu</span>
-                    </div>
-                    <span class="text-[10px] opacity-70">Nguyễn Hùng</span>
-                </div>
-
-                <!-- Track 3 -->
-                <div onclick="selectSong(2)" id="track-2" class="track-item flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition">
-                    <div class="flex items-center gap-2.5 truncate">
-                        <span class="text-[11px] font-bold opacity-60">03</span>
-                        <span class="font-bold truncate">Chỉ Biết Nói Cho Em Nghe Vậy Thôi</span>
-                    </div>
-                    <span class="text-[10px] opacity-70">TopKN mashup</span>
-                </div>
-            </div>
-
-            <audio id="mainAudio" src="lancuoi.mp3"></audio>
+            <audio id="mainAudio" preload="auto"></audio>
         </div>
 
-        <!-- Checklist NDC -->
+        <!-- 3. Checklist Thanh Xuân NDC -->
         <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 class="text-base font-extrabold text-slate-800 flex items-center gap-1.5">
@@ -144,21 +117,22 @@
                 </label>
                 <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
                     <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Thổ lộ tình cảm trên Nguyễn Đình Chiểu Confession</span>
+                    <span class="text-slate-700">Thổ lộ tình cảm trên NDC Confession</span>
                 </label>
                 <label class="flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition">
                     <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                    <span class="text-slate-700">Đạt điểm cao môn bạn dở</span>
+                    <span class="text-slate-700">Đạt điểm cao môn bạn chưa giỏi</span>
                 </label>
             </div>
 
+            <!-- Ô thêm mục tiêu mới (Hỗ trợ bấm phím Enter) -->
             <div class="flex gap-2 pt-2">
                 <input id="newTodoInput" type="text" placeholder="Thêm điều bạn muốn làm trước khi ra trường..." class="flex-grow px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-400">
                 <button onclick="addCustomTodo()" class="px-3 py-2 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition">+</button>
             </div>
         </div>
 
-        <!-- Khung Confession -->
+        <!-- 4. Khung Confession Ẩn Danh -->
         <div class="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-md">
             <div class="text-center mb-4">
                 <span class="text-2xl">🤫</span>
@@ -197,7 +171,7 @@
 
     </main>
 
-    <!-- JAVASCRIPT XỬ LÝ PLAYLIST 3 BÀI -->
+    <!-- Xử lý logic an toàn, không pop-up lỗi -->
     <script>
         const songs = [
             { title: "Lần Cuối", artist: "Ngọt", file: "lancuoi.mp3" },
@@ -213,6 +187,26 @@
         const songTitle = document.getElementById('currentSongTitle');
         const songArtist = document.getElementById('currentSongArtist');
         const diskIcon = document.getElementById('diskIcon');
+        const playlistContainer = document.getElementById('playlistContainer');
+
+        function renderPlaylist() {
+            playlistContainer.innerHTML = '';
+            songs.forEach((song, index) => {
+                const trackDiv = document.createElement('div');
+                trackDiv.id = `track-${index}`;
+                trackDiv.className = `track-item flex items-center justify-between p-2.5 rounded-xl border border-transparent bg-slate-800/40 hover:bg-slate-800 cursor-pointer transition ${index === currentIndex ? 'active-track' : ''}`;
+                trackDiv.onclick = () => selectSong(index);
+                
+                trackDiv.innerHTML = `
+                    <div class="flex items-center gap-2.5 truncate">
+                        <span class="text-[11px] font-bold opacity-60">0${index + 1}</span>
+                        <span class="font-bold truncate">${song.title}</span>
+                    </div>
+                    <span class="text-[10px] opacity-70 flex-shrink-0 ml-2">${song.artist}</span>
+                `;
+                playlistContainer.appendChild(trackDiv);
+            });
+        }
 
         function loadSong(index) {
             currentIndex = index;
@@ -220,7 +214,6 @@
             songTitle.textContent = songs[index].title;
             songArtist.textContent = songs[index].artist;
 
-            // Đổi màu bài đang chọn trong danh sách
             document.querySelectorAll('.track-item').forEach((el, i) => {
                 if (i === index) {
                     el.classList.add('active-track');
@@ -237,19 +230,31 @@
                 diskIcon.classList.remove('animate-spin');
                 isPlaying = false;
             } else {
-                audio.play();
-                playBtn.textContent = "⏸";
-                diskIcon.classList.add('animate-spin');
-                isPlaying = true;
+                audio.play().then(() => {
+                    playBtn.textContent = "⏸";
+                    diskIcon.classList.add('animate-spin');
+                    isPlaying = true;
+                }).catch(() => {
+                    // Tự động im lặng, không hiện bất kỳ bảng cảnh báo nào
+                    playBtn.textContent = "▶";
+                    diskIcon.classList.remove('animate-spin');
+                    isPlaying = false;
+                });
             }
         }
 
         function selectSong(index) {
             loadSong(index);
-            audio.play();
-            playBtn.textContent = "⏸";
-            diskIcon.classList.add('animate-spin');
-            isPlaying = true;
+            audio.play().then(() => {
+                playBtn.textContent = "⏸";
+                diskIcon.classList.add('animate-spin');
+                isPlaying = true;
+            }).catch(() => {
+                // Tự động im lặng
+                playBtn.textContent = "▶";
+                diskIcon.classList.remove('animate-spin');
+                isPlaying = false;
+            });
         }
 
         function nextSong() {
@@ -262,25 +267,26 @@
             selectSong(prevIndex);
         }
 
-        // Tự động chuyển bài khi hát xong
         audio.addEventListener('ended', nextSong);
 
-        // Checklist To-do
+        // Khởi động
+        renderPlaylist();
+        loadSong(0);
+
+        // Thêm việc To-do
+        const todoInput = document.getElementById('newTodoInput');
+        todoInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addCustomTodo();
+            }
+        });
+
         function addCustomTodo() {
-            const input = document.getElementById('newTodoInput');
-            const text = input.value.trim();
+            const text = todoInput.value.trim();
             if (!text) return;
 
             const todoList = document.getElementById('todoList');
             const label = document.createElement('label');
             label.className = "flex items-center gap-2.5 py-2.5 cursor-pointer hover:bg-slate-50 rounded-lg px-1 transition";
             label.innerHTML = `
-                <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-300">
-                <span class="text-slate-700">${text}</span>
-            `;
-            todoList.appendChild(label);
-            input.value = "";
-        }
-    </script>
-</body>
-</html>
+                <input type="checkbox" class="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-slate-
